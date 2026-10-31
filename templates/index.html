@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div><h1>Student Management</h1><p class="muted">Records, performance and attendance in one place</p></div>
+    <div class="top-actions">
+      <a class="btn ghost" href="/api/export">Export CSV</a>
+      <button id="addBtn" class="btn primary">Add student</button>
+    </div>
+  </header>
+
+  <section class="stats" aria-label="Summary">
+    <div class="stat"><span id="sTotal">0</span><small>Students</small></div>
+    <div class="stat"><span id="sGpa">0</span><small>Average CGPA</small></div>
+    <div class="stat"><span id="sAtt">0%</span><small>Average attendance</small></div>
+    <div class="stat warn"><span id="sLow">0</span><small>Below 75% attendance</small></div>
+  </section>
+
+  <section class="card courses" id="courseBars" hidden></section>
+
+  <section class="card">
+    <div class="tools">
+      <input id="search" type="search" placeholder="Search name, enrollment or email" aria-label="Search students">
+      <select id="courseFilter" aria-label="Filter by course"><option value="">All courses</option></select>
+      <select id="sort" aria-label="Sort by">
+        <option value="name">Name</option><option value="cgpa">Top CGPA</option>
+        <option value="attendance">Attendance</option><option value="newest">Newest</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>Enrollment</th><th>Course</th><th>Sem</th><th>CGPA</th><th>Attendance</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p id="empty" class="empty" hidden></p>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <form id="form" novalidate>
+    <h2 id="dlgTitle">Add student</h2>
+    <div class="fields">
+      <label>Full name<input name="name" required maxlength="80"></label>
+      <label>Enrollment no.<input name="enrollment" required maxlength="20"></label>
+      <label>Email<input name="email" type="email" required></label>
+      <label>Phone<input name="phone" inputmode="tel" maxlength="15"></label>
+      <label>Course<input name="course" list="courseList" required maxlength="60"></label>
+      <datalist id="courseList"></datalist>
+      <label>Semester<input name="semester" type="number" min="1" max="12" required></label>
+      <label>CGPA (0-10)<input name="cgpa" type="number" min="0" max="10" step="0.01" required></label>
+      <label>Attendance %<input name="attendance" type="number" min="0" max="100" step="0.1" required></label>
+    </div>
+    <p id="formErr" class="err" role="alert"></p>
+    <div class="row"><button type="button" id="cancel" class="btn ghost">Cancel</button><button class="btn primary" type="submit">Save</button></div>
+  </form>
+</dialog>
+<div id="toast" class="toast" role="status"></div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
